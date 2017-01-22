@@ -11,6 +11,20 @@
   connection: local
   debug: msg=TODO
 
+- name: Ensure we have an SSH key to enable access
+  connection: local
+  digital_ocean_sshkey:
+    state: present
+    name: email_ssh_key
+    ssh_pub_key: 'ssh-rsa AAAA...'
+    #client_id: XXX
+    api_key: "{{ digital_ocean_token }}"
+  register: email_ssh_key
+
+- name: Print out SSH key details
+  connection: local
+  debug: msg="{{ email_ssh_key }}"
+
 - name: Ensure that the VM(s) are present on provider infrastructure
   connection: local
   digital_ocean:
@@ -27,6 +41,9 @@
 - name: Print out droplet details
   connection: local
   debug: msg="{{ email_droplet }}"
+
+- name: Add tags to droplet
+  debug: msg=TODO
 
 - name: Add Email instance to host inventory group
   connection: local
