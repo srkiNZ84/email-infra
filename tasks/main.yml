@@ -11,12 +11,23 @@
   connection: local
   debug: msg=TODO
 
+- name: Generate SSH key if we need it
+  command: "ssh-keygen -N "" -f email.key"
+  register: ssh_keygen_output
+
+- name: Get ssh public key
+  set_fact:
+    ssh_pubkey_contents: "{{ lookup('file', 'email.key.pub') }}"
+
+- name: Print pubkey
+  debug: msg="{{ ssh_pubkey_contents }}"
+
 - name: Ensure we have an SSH key to enable access
   connection: local
   digital_ocean_sshkey:
     state: present
     name: email_ssh_key
-    ssh_pub_key: 'ssh-rsa AAAA...'
+    ssh_pub_key: "{{ ssh_pubkey_contents }}"
     #client_id: XXX
     api_key: "{{ digital_ocean_token }}"
   register: email_ssh_key
