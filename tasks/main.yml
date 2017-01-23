@@ -21,6 +21,7 @@
 - name: Generate SSH key if we need it
   command: "ssh-keygen -N \"\" -f email.key"
   register: ssh_keygen_output
+  when: "{{ ssh_keyfile.stat.exists }}"
 
 - name: Get ssh public key
   set_fact:
@@ -49,7 +50,7 @@
     state: present
     command: droplet
     name: email
-    ssh_key_ids: "{{ email_ssh_key.ssh_key.id }}"
+    ssh_key_ids: "[{{ email_ssh_key.ssh_key.id }}]"
     api_token: "{{ digital_ocean_token }}"
     size_id: 2gb
     region_id: nyc3
@@ -64,8 +65,9 @@
 - name: Add tags to droplet
   debug: msg=TODO
 
+  # TODO: Add logic to use 'root' user when DO, 'ubuntu' when AWS
 - name: Add Email instance to host inventory group
   connection: local
-  add_host: hostname={{ item.ip_address }} groupname=email ansible_ssh_user=ubuntu ansible_ssh_private_key_file="email.key"
+  add_host: hostname={{ item.ip_address }} groupname=email ansible_ssh_user=root ansible_ssh_private_key_file="email.key"
   with_items:
     - "{{ email_droplet.droplet }}"
