@@ -11,6 +11,13 @@
   connection: local
   debug: msg=TODO
 
+- name: Check if SSH key is on disk
+  stat: path=email.key
+  register: ssh_keyfile
+
+- name: Print out ssh keyfile stat
+  debug: msg="{{ ssh_keyfile }}"
+
 - name: Generate SSH key if we need it
   command: "ssh-keygen -N \"\" -f email.key"
   register: ssh_keygen_output
