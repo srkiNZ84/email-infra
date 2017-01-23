@@ -42,6 +42,7 @@
     state: present
     command: droplet
     name: email
+    ssh_key_ids: "{{ email_ssh_key.ssh_key.id }}"
     api_token: "{{ digital_ocean_token }}"
     size_id: 2gb
     region_id: nyc3
