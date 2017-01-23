@@ -21,7 +21,7 @@
 - name: Generate SSH key if we need it
   command: "ssh-keygen -N \"\" -f email.key"
   register: ssh_keygen_output
-  when: "{{ ssh_keyfile.stat.exists }}"
+  when: "not {{ ssh_keyfile.stat.exists }}"
 
 - name: Get ssh public key
   set_fact:
