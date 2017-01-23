@@ -12,7 +12,7 @@
   debug: msg=TODO
 
 - name: Generate SSH key if we need it
-  command: "ssh-keygen -N "" -f email.key"
+  command: "ssh-keygen -N \"\" -f email.key"
   register: ssh_keygen_output
 
 - name: Get ssh public key
@@ -24,12 +24,12 @@
 
 - name: Ensure we have an SSH key to enable access
   connection: local
-  digital_ocean_sshkey:
+  digital_ocean:
     state: present
+    command: ssh
     name: email_ssh_key
     ssh_pub_key: "{{ ssh_pubkey_contents }}"
-    #client_id: XXX
-    api_key: "{{ digital_ocean_token }}"
+    api_token: "{{ digital_ocean_token }}"
   register: email_ssh_key
 
 - name: Print out SSH key details
