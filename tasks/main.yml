@@ -13,7 +13,7 @@
     mailserver_exists: true
   when: "{{ groups['emailserver'] is defined and groups['emailserver'] | length >= 1 }}"
 
-  block:
+- block:
     - name: Check if SSH key is on disk
       stat: path=email.key
       register: ssh_keyfile
