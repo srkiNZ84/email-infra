@@ -79,3 +79,6 @@
         - "{{ email_droplet.droplet }}"
 
   when: "{{ mailserver_exists is not defined }}"
+
+- name: Ensure we set user and key to use by setting Ansible group vars
+  debug: msg=TODO
