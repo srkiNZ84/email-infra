@@ -66,10 +66,14 @@
       debug: msg="{{ email_droplet }}"
 
     - name: Wait for SSH to come up
-      wait_for: host={{ email_droplet }} port=22 delay=30 timeout=320 state=started
+      wait_for: host={{ email_droplet.droplet.ip_address }} port=22 delay=30 timeout=320 state=started
 
     - name: Add tags to droplet
-      debug: msg=TODO
+      digital_ocean_tag:
+        name: "emailserver"
+        api_token: "{{ digital_ocean_token }}"
+        resource_id: "{{ email_droplet.droplet.id }}"
+        state: present
 
       # TODO: Add logic to use 'root' user when DO, 'ubuntu' when AWS
     - name: Add Email instance to host inventory group
